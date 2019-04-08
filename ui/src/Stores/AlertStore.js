@@ -91,6 +91,8 @@ function NewUnappliedFilter(raw) {
 }
 
 class AlertStore {
+  groupLimit = observable({ value: 50, step: 30 });
+
   filters = observable(
     {
       values: [],
@@ -156,6 +158,7 @@ class AlertStore {
   info = observable(
     {
       totalAlerts: 0,
+      totalGroups: 0,
       version: "unknown",
       upgradeNeeded: false
     },
@@ -233,7 +236,7 @@ class AlertStore {
     this.status.setFetching();
 
     const alertsURI =
-      FormatBackendURI("alerts.json?") +
+      FormatBackendURI(`alerts.json?groupLimit=${this.groupLimit.value}&`) +
       FormatAPIFilterQuery(this.filters.values.map(f => f.raw));
 
     return fetch(alertsURI, { credentials: "include" })
@@ -335,7 +338,7 @@ class AlertStore {
       this.info.upgradeNeeded = true;
     }
     // update extra root level keys that are stored under 'info'
-    for (const key of ["totalAlerts", "version"]) {
+    for (const key of ["totalAlerts", "totalGroups", "version"]) {
       if (this.info[key] !== result[key]) {
         this.info[key] = result[key];
       }

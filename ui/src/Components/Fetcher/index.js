@@ -78,6 +78,7 @@ const Fetcher = observer(
       return (
         // data-filters is there to register filters for observation in mobx
         <span
+          data-group-limit={alertStore.groupLimit.value}
           data-filters={alertStore.filters.values.map(f => f.raw).join(" ")}
           data-interval={settingsStore.fetchConfig.config.interval}
         />

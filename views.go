@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -113,6 +114,15 @@ func alerts(c *gin.Context) {
 
 	// get filters
 	matchFilters, validFilters := getFiltersFromQuery(c.QueryArray("q"))
+
+	maxGroups := 0
+	groupLimit, found := c.GetQuery("groupLimit")
+	if found {
+		i, err := strconv.ParseInt(groupLimit, 10, 32)
+		if err == nil {
+			maxGroups = int(i)
+		}
+	}
 
 	// set pointers for data store objects, need a lock until end of view is reached
 	alerts := map[string]models.APIAlertGroup{}
@@ -228,9 +238,12 @@ func alerts(c *gin.Context) {
 			agCopy.Hash = agCopy.ContentFingerprint()
 			apiAG := models.APIAlertGroup{AlertGroup: agCopy}
 			apiAG.DedupSharedMaps()
-			alerts[agCopy.ID] = apiAG
+			if maxGroups == 0 || len(alerts) < maxGroups {
+				alerts[agCopy.ID] = apiAG
+			}
 			resp.TotalAlerts += len(agCopy.Alerts)
 		}
+		resp.TotalGroups++
 
 	}
 
