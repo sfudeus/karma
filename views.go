@@ -242,8 +242,8 @@ func alerts(c *gin.Context) {
 				alerts[agCopy.ID] = apiAG
 			}
 			resp.TotalAlerts += len(agCopy.Alerts)
+			resp.TotalGroups++
 		}
-		resp.TotalGroups++
 
 	}
 
