@@ -41,3 +41,13 @@ $nav-tabs-link-active-bg: #fff;
 .cursor-text {
   cursor: text;
 }
+
+.bg-secondary-25 {
+  background-color: lighten($secondary, 25%);
+}
+.bg-danger-25 {
+  background-color: lighten($danger, 38%);
+}
+.bg-success-25 {
+  background-color: lighten($success, 50%);
+}

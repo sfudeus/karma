@@ -9,7 +9,7 @@ import { faVolumeMute } from "@fortawesome/free-solid-svg-icons/faVolumeMute";
 import { APIAlert, APIGroup } from "Models/API";
 import { AlertStore } from "Stores/AlertStore";
 import { SilenceFormStore } from "Stores/SilenceFormStore";
-import { BorderClassMap } from "Common/Colors";
+import { BorderClassMap, BackgroundClassMap } from "Common/Colors";
 import { StaticLabels } from "Common/Query";
 import { FilteringLabel } from "Components/Labels/FilteringLabel";
 import { TooltipWrapper } from "Components/TooltipWrapper";
@@ -47,10 +47,11 @@ const Alert = observer(
       let classNames = [
         "components-grid-alertgrid-alertgroup-alert",
         "list-group-item",
-        "pl-1 pr-0 py-0",
+        "pl-1 pr-0 py-1",
         "my-1",
         "rounded-0",
         "border-left-1 border-right-0 border-top-0 border-bottom-0",
+        `${BackgroundClassMap[alert.state] || "bg-warning"}-25`,
         BorderClassMap[alert.state] || "border-warning"
       ];
 
