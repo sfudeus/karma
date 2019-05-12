@@ -10,6 +10,7 @@ import { NavBar } from "Components/NavBar";
 import { Grid } from "Components/Grid";
 import { Fetcher } from "Components/Fetcher";
 import { FaviconBadge } from "Components/FaviconBadge";
+import { FullScreenFlash } from "Components/FullScreenFlash";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 import "./App.scss";
@@ -65,6 +66,10 @@ class App extends Component {
           />
         </Provider>
         <Fetcher
+          alertStore={this.alertStore}
+          settingsStore={this.settingsStore}
+        />
+        <FullScreenFlash
           alertStore={this.alertStore}
           settingsStore={this.settingsStore}
         />

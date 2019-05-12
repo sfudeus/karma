@@ -6,6 +6,8 @@ import equal from "fast-deep-equal";
 
 import qs from "qs";
 
+import moment from "moment";
+
 const QueryStringEncodeOptions = {
   encodeValuesOnly: true, // don't encode q[]
   indices: false // go-gin doesn't support parsing q[0]=foo&q[1]=bar
@@ -157,9 +159,15 @@ class AlertStore {
     {
       totalAlerts: 0,
       version: "unknown",
-      upgradeNeeded: false
+      upgradeNeeded: false,
+      lastAlertsUpdateTimestamp: null,
+      recordNewAlertsUpdate() {
+        this.lastAlertsUpdateTimestamp = moment();
+      }
     },
-    {},
+    {
+      recordNewAlertsUpdate: action
+    },
     { name: "API response info" }
   );
 
@@ -314,6 +322,7 @@ class AlertStore {
     // update groups, it can be huge so we have custom logic with cheaper
     // comparision logic running per group using content hashes from the API
     // response
+    let groupsUpdated = false;
     for (const key of Object.keys(result.groups)) {
       // set/update each group if:
       // * it's not yet stored in AlertStore
@@ -324,12 +333,17 @@ class AlertStore {
           result.groups[key].hash !== this.data.groups[key].hash)
       ) {
         this.data.groups[key] = result.groups[key];
+        groupsUpdated = true;
       }
     }
     for (const key of Object.keys(this.data.groups).filter(
       k => !(k in result.groups)
     )) {
       delete this.data.groups[key];
+      groupsUpdated = true;
+    }
+    if (groupsUpdated === true) {
+      this.info.recordNewAlertsUpdate();
     }
 
     // before storing new version check if we need to reload

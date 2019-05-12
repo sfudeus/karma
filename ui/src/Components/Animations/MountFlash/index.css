@@ -1,0 +1,21 @@
+.components-animation-flash {
+  transform: translateZ(0);
+}
+
+.components-animation-flash-appear {
+  display: block;
+  opacity: 0.1;
+  background-color: #ffae42;
+}
+
+.components-animation-flash-appear-active {
+  opacity: 0.8;
+  background-color: #ff7641;
+  transition-property: opacity, background-color;
+  transition-duration: 0.12;
+  transition-timing-function: ease;
+}
+
+.components-animation-flash-appear-done {
+  display: none;
+}
